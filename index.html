@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .box{
+            display:inline-block;
+            margin:10px;
+            vertical-align:top;
+        }
+        .box2{
+            display:inline-block;
+            margin:3px;
+        }
+        .container{
+            margin:0px;
+        }
+        .im{
+            margin: 10px;
+        }
+        .im2{
+            margin: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <h1 style="text-align:center">Project 5</h1>
+        <h4 style="text-align:center">Fun With Diffusion Models!</h4>
+    <h2 style="text-align:center">Yuan-Hao Huang</h2>
+        <h4 style="text-align:center">yhhuang20@berkeley.edu</h4>
+
+    <h1>Overview</h1>
+    <p>
+        This project plays around with diffusion models. 
+        In part A, we use diffusion models to obtain interesting results. 
+        In part B, we implement our own diffusion model using U-Net. 
+    </p>
+
+    <h1>Part A: The Power of Diffusion Models!</h1>
+    
+    <h2>0. Setup</h2>
+    <p>
+        The smaller and larger images are 64x64, 256x256, respectively. 
+    </p>
+    <div class="box">num_inference_steps = 5: <br><img src="partA/part0 5.png" width="800" class="im"></div>
+    <div class="box">num_inference_steps = 10: <br><img src="partA/part0 10.png" width="800" class="im"></div>
+    <div class="box">num_inference_steps = 20: <br><img src="partA/part0 20.png" width="800" class="im"></div>
+    <p>
+        Clearly, the images generated with larger num_inference_steps are clearer and have more details. 
+        All images correspond accurately to the prompt. 
+        The random seed used here is 180. 
+    </p>
+
+    <h2>1.1 Implementing the Forward Process</h2>
+    <div class="box">Test image at different noise levels: <br><img src="partA/part1-1.png" width="300" class="im"></div>
+
+    <h2>1.2 Classical Denoising</h2>
+    <div class="box">Gaussian blur filtering : <br><img src="partA/part1-2.png" width="300" class="im"></div>
+
+    <h2>1.3 One-Step Denoising</h2>
+    <div class="box">Original image: <br><img src="partA/campanile64.png" width="100" class="im"></div><br>
+    <div class="box">Noisy image: <br><img src="partA/part1-1.png" width="300" class="im"></div><br>
+    <div class="box">Estimate of the original image using one-step denoise: <br><img src="partA/part1-3.jpg" width="800" class="im"></div>
+
+    <h2>1.4 Iterative Denoising</h2>
+    <div class="box">Intermediate noisy image during denoising: <br><img src="partA/part1-4 1.jpg" width="400" class="im"></div>
+    <div class="box">Denoising results (64x64, 256x256): <br><img src="partA/part1-4 2.jpg" width="800" class="im"></div>
+
+    <h2>1.5 Diffusion Model Sampling</h2>
+    <div class="box"><img src="partA/part1-5.jpg" width="800" class="im"></div>
+
+    <h2>1.6 Classifier-Free Guidance (CFG)</h2>
+    <div class="box">gamma = 7: <br><img src="partA/part1-6 7.jpg" width="800" class="im"></div>
+    <p>Observation: The images generated is much more colorful than the previous algorithm. </p>
+    <p>It is also fun playing with the scale: </p>
+    <div class="box">gamma = -70: <br><img src="partA/part1-6 -70.jpg" width="800" class="im"></div>
+    <div class="box">gamma = -15: <br><img src="partA/part1-6 -15.png" width="800" class="im"></div>
+    <div class="box">gamma = -7: <br><img src="partA/part1-6 -7.png" width="800" class="im"></div>
+    <div class="box">gamma = 0: <br><img src="partA/part1-6 0.jpg" width="800" class="im"></div>
+    <div class="box">gamma = 7: <br><img src="partA/part1-6 7.jpg" width="800" class="im"></div>
+    <div class="box">gamma = 15: <br><img src="partA/part1-6 15.jpg" width="800" class="im"></div>
+    <div class="box">gamma = 70: <br><img src="partA/part1-6 70.jpg" width="800" class="im"></div>
+
+    <h2>1.7 Image-to-image Translation</h2>
+    <div class="box">Original image: <br><img src="partA/campanile.jpg" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7 c.jpg" width="800" class="im"></div><br>
+    <div class="box">Original image: <br><img src="partA/hao.jpg" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7 h.jpg" width="800" class="im"></div><br>
+    <div class="box">Original image: <br><img src="partA/soda.jpg" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7 s.jpg" width="800" class="im"></div><br>
+    
+    <h2>1.7.1 Editing Hand-Drawn and Web Images</h2>
+    <div class="box">(Web) Original image: <br><img src="partA/avocado.png" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7-1 a.jpg" width="800" class="im"></div><br>
+    <div class="box">(Web) Original image: <br><img src="partA/HSR.png" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7-1 h.jpg" width="800" class="im"></div><br>
+    <div class="box">(Hand-Drawn) Original image: <br><img src="partA/myImage_color.png" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7-1 color.jpg" width="800" class="im"></div><br>
+    <div class="box">(Hand-Drawn) Original image: <br><img src="partA/myImage_heart.png" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7-1 heart.jpg" width="800" class="im"></div><br>
+    <div class="box">(Hand-Drawn) Original image: <br><img src="partA/myImage_snail.png" width="100" class="im"></div><br>
+    <div class="box">SDEdit: <br><img src="partA/part1-7-1 snail.png" width="800" class="im"></div><br>
+
+    <h2>1.7.2 Inpainting</h2>
+    <div class="box">Original image: <br><img src="partA/part1-7-2 c1.jpg" width="300" class="im"></div><br>
+    <div class="box">Inpainted: <br><img src="partA/part1-7-2 c2.jpg" width="300" class="im"></div><br>
+    <div class="box">Original image: <br><img src="partA/baseball.jpg" width="300" class="im"></div><br>
+    <div class="box">Mask: <br><img src="partA/part1-7-2 b1.jpg" width="300" class="im"></div><br>
+    <div class="box">Inpainted: <br><img src="partA/part1-7-2 b2.jpg" width="300" class="im"></div><br>
+    <div class="box">Original image: <br><img src="partA/bus.jpg" width="300" class="im"></div><br>
+    <div class="box">Mask: <br><img src="partA/part1-7-2 bus1.jpg" width="300" class="im"></div><br>
+    <div class="box">Inpainted: <br><img src="partA/part1-7-2 bus2.jpg" width="300" class="im"></div><br>
+
+    <h2>1.7.3 Text-Conditional Image-to-image Translation</h2>
+    <div class="box"><img src="partA/part1-7-3 c.jpg" width="800" class="im"></div><br>
+    <div class="box">Original image: <br><img src="partA/duck.jpg" width="300" class="im"></div><br>
+    <div class="box">Prompt: a photo of a dog<br><img src="partA/part1-7-3 d.jpg" width="800" class="im"></div><br>
+    <div class="box">Original image: <br><img src="partA/boat.jpg" width="300" class="im"></div><br>
+    <div class="box">Prompt: a man wearing a hat<br><img src="partA/part1-7-3 b.jpg" width="800" class="im"></div><br>
+
+    <h2>1.8 Visual Anagrams</h2>
+    <div class="container">
+        <div class="box">an oil painting of an old man <br><img src="partA/part1-8 1.jpg" width="150" class="im"></div>
+        <div class="box">an oil painting of people around a campfire <br><img src="partA/part1-8 1 flip.jpg" width="150" class="im"></div>
+    </div>  
+    <div class="container">
+        <div class="box">a photo of the amalfi cost <br><img src="partA/part1-8 2.jpg" width="150" class="im"></div>
+        <div class="box">a photo of a dog <br><img src="partA/part1-8 2 flip.jpg" width="150" class="im"></div>
+    </div>  
+    <div class="container">
+        <div class="box">an oil painting of a snowy mountain village <br><img src="partA/part1-8 3.jpg" width="150" class="im"></div>
+        <div class="box">a pencil <br><img src="partA/part1-8 3 flip.jpg" width="150" class="im"></div>
+    </div>  
+
+    <h2>1.9 Hybrid Images</h2>
+    <div class="box">a lithograph of a skull + a lithograph of waterfalls <br><img src="partA/part1-9 1.jpg" width="150" class="im"></div><br>
+    <div class="box">a rocket ship + a photo of a dog <br><img src="partA/part1-9 2.jpg" width="150" class="im"></div><br>
+    <div class="box">a photo of a dog + a lithograph of a skull <br><img src="partA/part1-9 3.jpg" width="150" class="im"></div><br>
+    
+
+
+    <h1>Part B: Diffusion Models from Scratch!</h1>
+    
+    <h2>Part 1: Training a Single-Step Denoising UNet</h2>
+
+    <p>A visualization of the noising process using sigma = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]: </p>
+    <div class="container">
+        <div class="box"><img src="partB/1-1 1.png" width="50" class="im"></div>
+        <div class="box"><img src="partB/1-1 2.png" width="50" class="im"></div>
+        <div class="box"><img src="partB/1-1 3.png" width="50" class="im"></div>
+        <div class="box"><img src="partB/1-1 4.png" width="50" class="im"></div>
+        <div class="box"><img src="partB/1-1 5.png" width="50" class="im"></div>
+        <div class="box"><img src="partB/1-1 6.png" width="50" class="im"></div>
+    </div>  
+    <div class="box">Training loss curve: <br><img src="partB/1-2.jpg" width="400" class="im"></div><br>
+    <div class="box">Sample results on the test set after the 1st epoch [input | noisy | output]: <br><img src="partB/1-3.png" width="200" class="im"></div>
+    <div class="box">Sample results on the test set after the 5th epoch [input | noisy | output]: <br><img src="partB/1-4.png" width="200" class="im"></div>
+    <div class="box">Sample results on the test set with out-of-distribution noise levels, sigma = [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0], [noisy | output]: <br><img src="partB/1-5.png" width="150" class="im"></div>
+
+    <h2>Part 2: Training a Diffusion Model</h2>
+
+    <h2>2.1 Adding Time Conditioning to UNet</h2>
+    <div class="box">Training loss curve: <br><img src="partB/2-1.jpg" width="400" class="im"></div><br>
+    <p>Sampling results for the time-conditioned UNet after 5 epochs: </p>
+    <div class="container">
+        <div class="box"><img src="partB/2-2 1.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/2-2 2.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/2-2 3.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/2-2 4.png" width="70" class="im"></div>
+    </div>  
+    <p>Sampling results for the time-conditioned UNet after 20 epochs: </p>
+    <div class="container">
+        <div class="box"><img src="partB/2-3 1.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/2-3 2.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/2-3 3.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/2-3 4.png" width="70" class="im"></div>
+    </div>  
+
+
+    <h2>2.4 Adding Class-Conditioning to UNet</h2>
+    <div class="box">Training loss curve: <br><img src="partB/3-1.jpg" width="400" class="im"></div><br>
+    <p>Sampling results for the class-conditioned UNet after 5 epochs: </p>
+    <div class="container">
+        <div class="box"><img src="partB/3-2 0.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 1.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 2.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 3.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 4.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 5.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 6.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 7.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 8.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-2 9.png" width="70" class="im"></div>
+    </div>  
+    <p>Sampling results for the class-conditioned UNet after 20 epochs: </p>
+    <div class="container">
+        <div class="box"><img src="partB/3-3 0.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 1.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 2.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 3.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 4.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 5.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 6.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 7.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 8.png" width="70" class="im"></div>
+        <div class="box"><img src="partB/3-3 9.png" width="70" class="im"></div>
+    </div> 
+
+    </body>
+</html>
